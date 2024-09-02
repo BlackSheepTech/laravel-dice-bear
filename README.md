@@ -1,13 +1,13 @@
 <p align="center">
-    <a href="https://github.com/BlackSheepTech/ui-avatars" target="_blank">
+    <a href="https://github.com/BlackSheepTech/dice-bear" target="_blank">
         <img src="https://avatars.githubusercontent.com/u/85756821?s=400&u=14843f72938dc40cbd14400f5b3daad45f054f43&v=4" width="200" alt="BlackSheepTech UiAvatars">
     </a>
 </p>
 
 <p align="center">
-    <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/packagist/v/black-sheep-tech/dice-bear" alt="Latest Stable Version"></a>
+    <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/packagist/v/black-sheep-tech/dice-bear" alt="Current Version"></a>
     <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/packagist/dt/black-sheep-tech/dice-bear" alt="Total Downloads"></a>
-    <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/packagist/l/black-sheep-tech/dice-bear" alt="License"></a>
+    <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/github/license/BlackSheepTech/dice-bear" alt="License"></a>
     <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/github/stars/BlackSheepTech/dice-bear" alt="Stars"></a>
 </p>
 
@@ -103,4 +103,4 @@ Contributions are welcome! Please feel free to submit a Pull Request on GitHub.
 ## Credits
 
 - [Israel Pinheiro](https://github.com/IsraelPinheiro)
-- [All Contributors](https://github.com/BlackSheepTech/ui-avatars/graphs/contributors)
+- [All Contributors](https://github.com/BlackSheepTech/dice-bear/graphs/contributors)
