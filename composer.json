@@ -1,0 +1,34 @@
+{
+    "name": "black-sheep-tech/dice-bear",
+    "description": "A simple service provider/wrapper for the DiceBear Avatars API (https://dicebear.com/).",
+    "type": "library",
+    "require": {
+      "php": "^8.0",
+      "laravel/framework": ">=9.0 <12.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BlackSheepTech\\DiceBear\\": "src/"
+        }
+    },
+    "scripts": {
+      "fix":[
+          "./vendor/bin/pint"
+      ],
+      "lint": [
+          "./vendor/bin/pint --test"
+      ]
+  },
+    "authors": [
+      {
+        "name": "Israel Pinheiro",
+        "email": "israel.pinheiro@live.com"
+      }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require-dev": {
+        "laravel/pint": "^1.17"
+    }
+}
