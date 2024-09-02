@@ -41,6 +41,7 @@ abstract class DiceBear
     const styles = [
         'adventurerNeutral',
         'botttsNeutral',
+        'initials',
     ];
 
     public function customServer(string $baseUrl): self
