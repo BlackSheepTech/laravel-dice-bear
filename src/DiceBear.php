@@ -192,6 +192,8 @@ abstract class DiceBear
     //Output Generation
     protected function buildBaseQueryParams(): array
     {
+        isset($this->seed) ?: $this->seed();
+
         return array_merge(
             $this->seed ? ['seed' => $this->seed] : [],
             $this->flip ? ['flip' => 'true'] : [],
