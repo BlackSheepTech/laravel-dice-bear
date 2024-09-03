@@ -3,12 +3,11 @@
 namespace BlackSheepTech\DiceBear\Styles;
 
 use BlackSheepTech\DiceBear\DiceBear;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class adventurerNeutral extends DiceBear
 {
-    private string $name = 'adventurer-neutral';
-
     private string $eyebrows;
 
     private string $eyes;
@@ -18,6 +17,38 @@ class adventurerNeutral extends DiceBear
     private string $glasses;
 
     private int $glassesProbability;
+
+    public function __construct()
+    {
+        $this->name = 'adventurer-neutral';
+        $this->style = 'adventurerNeutral';
+        $this->baseUrl = config('dice-bear.base_url', 'https://api.dicebear.com/9.x/');
+
+        throw_unless(filter_var($this->baseUrl, FILTER_VALIDATE_URL), new \InvalidArgumentException('Invalid base URL provided.'));
+
+        if (Str::substr($this->baseUrl, -1) != '/') {
+            $this->baseUrl .= '/';
+        }
+
+        $this->baseUrl .= "{$this->name}/";
+        $this->loadDefaults();
+    }
+
+    protected function loadDefaults(): void
+    {
+        parent::loadDefaults();
+
+        $defaults = config("dice-bear.defaults.style.{$this->style}", []);
+
+        throw_unless($defaults, new \InvalidArgumentException('No default values found for style options.'));
+
+        //Style specific options default values
+        $this->eyebrows = $defaults['eyebrows'];
+        $this->eyes = $defaults['eyes'];
+        $this->mouth = $defaults['mouth'];
+        $this->glasses = $defaults['glasses'];
+        $this->glassesProbability = $defaults['glassesProbability'];
+    }
 
     public function eyebrows(string $eyebrows): self
     {
@@ -100,13 +131,15 @@ class adventurerNeutral extends DiceBear
 
     private function buildQueryParams(): array
     {
+        $apiDefaults = config("dice-bear.api-defaults.styles.{$this->style}");
+
         return array_merge(
             parent::buildBaseQueryParams(),
-            isset($this->eyebrows) ? ['eyebrows' => $this->eyebrows] : [],
-            isset($this->eyes) ? ['eyes' => $this->eyes] : [],
-            isset($this->mouth) ? ['mouth' => $this->mouth] : [],
-            isset($this->glasses) ? ['glasses' => $this->glasses] : [],
-            isset($this->glassesProbability) ? ['glassesProbability' => $this->glassesProbability] : []
+            $this->eyebrows & $this->eyebrows != $apiDefaults['eyebrows'] ? ['eyebrows' => $this->eyebrows] : [],
+            $this->eyes & $this->eyes != $apiDefaults['eyes'] ? ['eyes' => $this->eyes] : [],
+            $this->mouth & $this->mouth != $apiDefaults['mouth'] ? ['mouth' => $this->mouth] : [],
+            $this->glasses & $this->glasses != $apiDefaults['glasses'] ? ['glasses' => $this->glasses] : [],
+            $this->glassesProbability & $this->glassesProbability != $apiDefaults['glassesProbability'] ? ['glassesProbability' => $this->glassesProbability] : [],
         );
     }
 }

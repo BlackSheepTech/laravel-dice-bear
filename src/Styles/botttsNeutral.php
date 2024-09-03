@@ -3,15 +3,43 @@
 namespace BlackSheepTech\DiceBear\Styles;
 
 use BlackSheepTech\DiceBear\DiceBear;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class botttsNeutral extends DiceBear
 {
-    private string $name = 'bottts-neutral';
-
     private string $eyes;
 
     private string $mouth;
+
+    public function __construct()
+    {
+        $this->name = 'adventurer-neutral';
+        $this->style = 'adventurerNeutral';
+        $this->baseUrl = config('dice-bear.base_url', 'https://api.dicebear.com/9.x/');
+
+        throw_unless(filter_var($this->baseUrl, FILTER_VALIDATE_URL), new \InvalidArgumentException('Invalid base URL provided.'));
+
+        if (Str::substr($this->baseUrl, -1) != '/') {
+            $this->baseUrl .= '/';
+        }
+
+        $this->baseUrl .= "{$this->name}/";
+        $this->loadDefaults();
+    }
+
+    protected function loadDefaults(): void
+    {
+        parent::loadDefaults();
+
+        $defaults = config("dice-bear.defaults.style.{$this->style}", []);
+
+        throw_unless($defaults, new \InvalidArgumentException('No default values found for style options.'));
+
+        //Style specific options default values
+        $this->eyes = $defaults['eyes'];
+        $this->mouth = $defaults['mouth'];
+    }
 
     public function eyes(string $eyes): self
     {
@@ -85,10 +113,12 @@ class botttsNeutral extends DiceBear
 
     private function buildQueryParams(): array
     {
+        $apiDefaults = config("dice-bear.api-defaults.styles.{$this->style}");
+
         return array_merge(
             parent::buildBaseQueryParams(),
-            isset($this->eyes) ? ['eyes' => $this->eyes] : [],
-            isset($this->mouth) ? ['mouth' => $this->mouth] : [],
+            $this->eyes & $this->eyes != $apiDefaults['eyes'] ? ['eyes' => $this->eyes] : [],
+            $this->mouth & $this->mouth != $apiDefaults['mouth'] ? ['mouth' => $this->mouth] : [],
         );
     }
 }

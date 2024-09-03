@@ -8,7 +8,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 abstract class DiceBear
 {
-    protected string $baseUrl = 'https://api.dicebear.com/9.x/';
+    protected string $style;
+
+    protected string $name;
+
+    protected string $baseUrl;
 
     protected string $format = 'svg';
 
@@ -38,28 +42,9 @@ abstract class DiceBear
 
     protected bool $randomizeIds = false;
 
-    const styles = [
-        'adventurerNeutral',
-        'botttsNeutral',
-        'initials',
-    ];
-
-    public function customServer(string $baseUrl): self
-    {
-        throw_unless(filter_var($baseUrl, FILTER_VALIDATE_URL), new \InvalidArgumentException('Invalid base URL provided.'));
-
-        if (Str::substr($baseUrl, -1) !== '/') {
-            $baseUrl .= '/';
-        }
-
-        $this->baseUrl = $baseUrl;
-
-        return $this;
-    }
-
     public static function style(string $style): self
     {
-        self::validateInArray($style, self::styles, 'style');
+        self::validateInArray($style, config('dice-bear.available-styles', []), 'style');
 
         $class = __NAMESPACE__.'\\Styles\\'.$style;
 
@@ -68,11 +53,29 @@ abstract class DiceBear
 
     public static function __callStatic($style, $arguments)
     {
-        self::validateInArray($style, self::styles, 'style');
+        return self::style($style);
+    }
 
-        $class = __NAMESPACE__.'\\Styles\\'.$style;
+    protected function loadDefaults(): void
+    {
+        $defaults = config('dice-bear.defaults.general');
 
-        return new $class($style);
+        throw_unless($defaults, new \InvalidArgumentException('No default values found for general options.'));
+
+        $this->format = $defaults['format'];
+        $this->seed = $defaults['seed'];
+        $this->flip = $defaults['flip'];
+        $this->rotate = $defaults['rotate'];
+        $this->scale = $defaults['scale'];
+        $this->radius = $defaults['radius'];
+        $this->size = $defaults['size'];
+        $this->backgroundColor = $defaults['backgroundColor'];
+        $this->backgroundType = $defaults['backgroundType'];
+        $this->backgroundRotation = $defaults['backgroundRotation'];
+        $this->translateX = $defaults['translateX'];
+        $this->translateY = $defaults['translateY'];
+        $this->clip = $defaults['clip'];
+        $this->randomizeIds = $defaults['randomizeIds'];
     }
 
     public function format(string $type = 'svg'): self
@@ -194,20 +197,22 @@ abstract class DiceBear
     {
         isset($this->seed) ?: $this->seed();
 
+        $apiDefaults = config('dice-bear.api-defaults.general');
+
         return array_merge(
             $this->seed ? ['seed' => $this->seed] : [],
-            $this->flip ? ['flip' => 'true'] : [],
-            $this->rotate ? ['rotate' => $this->rotate] : [],
-            $this->scale != 100 ? ['scale' => $this->scale] : [],
-            $this->radius ? ['radius' => $this->radius] : [],
-            $this->size != 64 ? ['size' => $this->size] : [],
-            isset($this->backgroundColor) ? ['backgroundColor' => $this->backgroundColor] : [],
-            $this->backgroundType != 'solid' ? ['backgroundType' => $this->backgroundType] : [],
-            isset($this->backgroundRotation) ? ['backgroundRotation' => $this->backgroundRotation] : [],
-            $this->translateX ? ['translateX' => $this->translateX] : [],
-            $this->translateY ? ['translateY' => $this->translateY] : [],
-            $this->clip ? ['clip' => 'true'] : [],
-            $this->randomizeIds ? ['randomizeIds' => 'true'] : [],
+            $this->flip & $this->flip != $apiDefaults['flip'] ? ['flip' => $this->flip ? 'true' : 'false'] : [],
+            $this->rotate & $this->rotate != $apiDefaults['rotate'] ? ['rotate' => $this->rotate] : [],
+            $this->scale & $this->scale != $apiDefaults['scale'] ? ['scale' => $this->scale] : [],
+            $this->radius & $this->radius != $apiDefaults['radius'] ? ['radius' => $this->radius] : [],
+            $this->size & $this->size != $apiDefaults['size'] ? ['size' => $this->size] : [],
+            $this->backgroundColor ? ['backgroundColor' => $this->backgroundColor] : [],
+            $this->backgroundType & $this->backgroundType != $apiDefaults['backgroundType'] ? ['backgroundType' => $this->backgroundType] : [],
+            $this->backgroundRotation & $this->backgroundRotation != $apiDefaults['backgroundRotation'] ? ['backgroundRotation' => $this->backgroundRotation] : [],
+            $this->translateX & $this->translateX != $apiDefaults['translateX'] ? ['translateX' => $this->translateX] : [],
+            $this->translateY & $this->translateY != $apiDefaults['translateY'] ? ['translateY' => $this->translateY] : [],
+            $this->clip & $this->clip != $apiDefaults['clip'] ? ['clip' => $this->clip ? 'true' : 'false'] : [],
+            $this->randomizeIds & $this->randomizeIds != $apiDefaults['randomizeIds'] ? ['randomizeIds' => $this->randomizeIds ? 'true' : 'false'] : [],
         );
     }
 
