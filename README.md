@@ -11,7 +11,7 @@
     <a href="https://packagist.org/packages/black-sheep-tech/dice-bear"><img src="https://img.shields.io/github/stars/BlackSheepTech/dice-bear" alt="Stars"></a>
 </p>
 
-DiceBear is a PHP library for Laravel used to generate avatar using the DiceBear API (https://dicebear.com/).
+Laravel DiceBear is a PHP library for Laravel used to generate avatar using the DiceBear API (https://dicebear.com/).
 This package provides a simple, fluent interface for customizing avatar parameters and generating the corresponding URL. It also allows downloading and saving the avatars locally. Support for self-hosted DiceBear API is also available.
 
 ## Installation

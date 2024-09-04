@@ -3,8 +3,8 @@
 namespace BlackSheepTech\DiceBear\Styles;
 
 use BlackSheepTech\DiceBear\DiceBear;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class initials extends DiceBear
 {
