@@ -1,5 +1,5 @@
 {
-    "name": "black-sheep-tech/dice-bear",
+    "name": "black-sheep-tech/laravel-dice-bear",
     "description": "A simple service provider/wrapper for the DiceBear Avatars API (https://dicebear.com/).",
     "homepage": "https://github.com/BlackSheepTech/dice-bear",
     "license": "MIT",
